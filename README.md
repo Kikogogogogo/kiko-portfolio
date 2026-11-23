@@ -8,6 +8,7 @@ A personal website and technical blog built with HTML and CSS. Edit it directly 
 
 - Open `docs/index.html` to preview the homepage, or run `python3 -m http.server 8000 --directory docs` from the repository root and visit `http://localhost:8000`.
 - Edit `docs/experience/index.html` and `docs/projects/index.html` to update experience and projects. Copy an existing `article` to add an entry.
+- Edit `docs/personal-life/index.html` to add personal stories or photos.
 - Change the palette, layout, or CSS 3D animation in `docs/style.css`. The illustration stays still for visitors who enable reduced motion.
 
 ## Publish a blog post
