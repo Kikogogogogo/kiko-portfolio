@@ -58,9 +58,25 @@
       <ul>
         <li><strong>Tool inputs.</strong> Check types and allowed values. If a tool expects an integer from one to four for the number of drafts, validate it before calling the tool.</li>
         <li><strong>Output format.</strong> If the app expects fields such as <code>title</code> and <code>description</code>, check that both are present and have the right types. Fix a harmless formatting issue when the meaning is clear. For missing information, ask the model to try again with a retry limit.</li>
-        <li><strong>Untrusted content.</strong> Prompt injection happens when text in a request, web page, or tool result tries to steer the agent away from its task. Attempts to reveal hidden instructions are one example. Input and output filters can help, and the harness should also enforce permissions outside the model. <a href="https://genai.owasp.org/llm2026/llm012026-prompt-injection/">OWASP guidance on prompt injection</a></li>
+        <li><strong>Where information came from.</strong> Keep track of which text came from the user, a web page, a tool, or saved memory. Treat material the agent reads as untrusted, including documents and images.</li>
         <li><strong>What happened during the run.</strong> Record which tools ran, which failed, and when the agent stopped. Keep sensitive content out of routine logs. A trace gives you something concrete to inspect when the result looks wrong.</li>
       </ul>
+
+      <h2>What if a web page tries to boss the agent around?</h2>
+      <p>Say I ask an agent to summarize a web page. The page includes a sentence telling the agent to send an email. The agent might mistake that sentence for a new task. That mix-up is called <strong>prompt injection</strong>.</p>
+      <p>When the instruction comes straight from someone chatting with the agent, it’s <strong>direct</strong>. When it comes from something the agent opens, like a web page, email, or PDF, it’s <strong>indirect</strong>. The person who asked for the summary may have no idea the instruction is there.</p>
+      <p>The stakes rise when an agent can read outside content, access private information, and send things out. Even a relevant search result can contain an instruction the agent should ignore. If the agent saves that instruction to memory, it can also affect later sessions.</p>
+
+      <figure class="guide-diagram">
+        <figcaption>For a page summary, give the agent only what it needs</figcaption>
+        <ol class="guide-steps">
+          <li><strong>Read</strong><span>Let it open the page you asked about.</span></li>
+          <li><strong>Check</strong><span>Have the harness check each requested tool and its permissions.</span></li>
+          <li><strong>Return</strong><span>Show the summary. Leave private mail and message sending outside this task.</span></li>
+        </ol>
+      </figure>
+
+      <p>Filters can flag suspicious content, but the harness still needs rules the model cannot override. Give the agent only the tools it needs, validate what it tries to send, and ask a person to approve sensitive actions. Keep instructions found in outside content out of long-term memory. <a href="https://genai.owasp.org/llm2026/llm012026-prompt-injection/">OWASP guidance on prompt injection</a></p>
 
       <p>I’d start with one model, one or two tools, and a clear check for success. Add a longer plan, more memory, or a second agent when the simpler setup falls short. That’s what “less is more” means to me when building AI people can monitor and trust.</p>
     </article>
