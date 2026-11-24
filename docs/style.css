@@ -40,8 +40,8 @@ h1 { font-size: clamp(3.15rem, 8.3vw, 6rem); font-weight: 810; }
   aspect-ratio: 1.24;
   border: 1px solid var(--line);
   border-radius: 1.6rem;
-  perspective: 650px;
-
+  perspective: 560px;
+  perspective-origin: 50% 42%;
 }
 .sparkle { position: absolute; font-size: clamp(1.35rem, 3vw, 2.55rem); line-height: 1; }
 .sparkle-pink { top: 23%; left: 20%; color: #ff72ae; }
@@ -58,11 +58,29 @@ h1 { font-size: clamp(3.15rem, 8.3vw, 6rem); font-weight: 810; }
 }
 .cat {
   position: relative;
-  width: 46%;
-  max-width: 12rem;
+  width: 49%;
+  max-width: 12.8rem;
   aspect-ratio: 1.35;
   margin-top: 5%;
-  animation: cat-bob 4.6s ease-in-out;
+  transform-style: preserve-3d;
+  transform: rotateX(-7deg) rotateY(-12deg);
+  animation: cat-bob 4.8s ease-in-out;
+}
+.cat::before,
+.cat::after {
+  content: "";
+  position: absolute;
+  inset: 1% 0 0;
+  border-radius: 47% 47% 43% 43%;
+}
+.cat::before {
+  transform: translateZ(-20px) scale(.96);
+  background: #59223e;
+  box-shadow: 0 0 18px #f768ad44;
+}
+.cat::after {
+  transform: translateZ(-10px) scale(.99);
+  background: linear-gradient(115deg, #b64e80, #7f345a 75%);
 }
 .cat-face {
   position: absolute;
@@ -71,8 +89,10 @@ h1 { font-size: clamp(3.15rem, 8.3vw, 6rem); font-weight: 810; }
   background:
     radial-gradient(ellipse at 23% 65%, #ff94ba 0 7%, transparent 8%),
     radial-gradient(ellipse at 77% 65%, #ff94ba 0 7%, transparent 8%),
-    linear-gradient(145deg, #ffe1ed 14%, #ffaed0 72%, #df639e);
-  box-shadow: inset 0 2px 3px #fff8, inset -7px -8px 16px #ae3c713d, 0 12px 25px #10030c70;
+    radial-gradient(ellipse at 35% 13%, #fff3f9 0, transparent 49%),
+    radial-gradient(ellipse at 38% 32%, #ffd6e7 12%, #ffa8cc 52%, #d85b98 82%, #a63771 100%);
+  transform: translateZ(7px);
+  box-shadow: inset 0 2px 4px #fff9, inset -7px -9px 16px #9a28604a, 0 10px 26px #17071166;
 }
 .cat-ear {
   --ear-angle: -14deg;
@@ -82,7 +102,8 @@ h1 { font-size: clamp(3.15rem, 8.3vw, 6rem); font-weight: 810; }
   width: 35%;
   height: 54%;
   border-radius: 25% 88% 15% 24%;
-  background: linear-gradient(145deg, #ffd0e4, #ef82b4);
+  background: linear-gradient(145deg, #ffe5f0 14%, #f694bf 65%, #ba487e);
+  box-shadow: inset 1px 2px 4px #fff6;
   transform: rotate(var(--ear-angle));
   transform-origin: 50% 90%;
   animation: ear-twitch 4.6s ease-in-out;
@@ -92,7 +113,7 @@ h1 { font-size: clamp(3.15rem, 8.3vw, 6rem); font-weight: 810; }
   position: absolute;
   inset: 20% 17% 14% 22%;
   border-radius: inherit;
-  background: #cf6299;
+  background: linear-gradient(145deg, #a83d73, #e178a9 72%);
 }
 .ear-right {
   --ear-angle: 14deg;
@@ -114,7 +135,7 @@ h1 { font-size: clamp(3.15rem, 8.3vw, 6rem); font-weight: 810; }
   content: "";
   width: 24%;
   border-radius: 50%;
-  background: radial-gradient(circle at 36% 28%, #fff4fa 0 13%, transparent 16%), #321525;
+  background: radial-gradient(circle at 36% 28%, #fff4fa 0 13%, transparent 17%), linear-gradient(#27101e, #63274a);
 }
 .cat-nose {
   position: absolute;
@@ -174,8 +195,8 @@ h1 { font-size: clamp(3.15rem, 8.3vw, 6rem); font-weight: 810; }
 .paw-upper { top: 15%; right: 10%; transform: rotate(21deg); }
 .paw-lower { bottom: 14%; left: 15%; transform: rotate(-26deg); }
 @keyframes cat-bob {
-  30% { transform: translateY(-.75rem) rotate(-7deg); }
-  67% { transform: translateY(-.35rem) rotate(5deg); }
+  32% { transform: translateY(-1rem) rotateX(9deg) rotateY(22deg) rotateZ(4deg); }
+  70% { transform: translateY(-.45rem) rotateX(-11deg) rotateY(-24deg) rotateZ(-5deg); }
 }
 @keyframes cat-blink {
   34%, 42%, 76%, 84% { transform: scaleY(1); }
@@ -230,6 +251,17 @@ nav a:hover, nav a[aria-current="page"] {
   text-decoration: none;
 }
 .hero .intro { max-width: 30ch; }
+.hero-art::before {
+  content: "";
+  position: absolute;
+  width: 79%;
+  height: 49%;
+  border: 1px solid #f89cce42;
+  border-radius: 50%;
+  transform: rotate(-17deg);
+  box-shadow: 0 0 24px #ff5f9f29, inset 0 0 20px #ff5f9f29;
+}
+.sparkle { text-shadow: 0 0 .65em currentColor; }
 .hero-art {
   box-shadow: inset 0 0 2.8rem #ff78b116, 0 1.25rem 3rem #0005;
   background:
