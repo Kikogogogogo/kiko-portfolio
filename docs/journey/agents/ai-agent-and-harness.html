@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A plain-English guide to AI agents, tool use, memory, and the harness that keeps the work on track.">
+  <title>AI Agents and Harnesses, in Plain English — Kiko Zhao</title>
+  <link rel="stylesheet" href="../../style.css?v=4">
+  <link rel="stylesheet" href="ai-agent-and-harness.css">
+</head>
+<body>
+  <header class="top wrap">
+    <a class="brand" href="../../">kiko<span>.</span></a>
+    <a href="./">Back to Agents</a>
+  </header>
+  <main class="wrap reading">
+    <article class="post agent-guide">
+      <p class="label">Agents</p>
+      <h1>AI Agents and Harnesses, in Plain English</h1>
+      <p class="intro">What happens between asking an AI to do something and getting a result you can trust?</p>
+
+      <h2>What is an AI agent?</h2>
+      <p>My way of thinking about an AI agent is that you give it a goal, and it handles some of the back-and-forth you would otherwise do yourself. A language model helps choose the next step. The surrounding software gives it tools it can use, such as search, a calculator, or an image generator.</p>
+      <p>Imagine I ask for a simple apple-shaped logo. With a vague brief, I might get an image that misses the style I had in mind. If I gather a few references and explain what I like about them, the brief gets clearer. An agent can collect references, use them to guide an image generator, and check the draft against the brief. I can still review the result and decide what works.</p>
+
+      <figure class="guide-diagram">
+        <figcaption>One pass through the agent loop</figcaption>
+        <ol class="guide-steps">
+          <li><strong>Think</strong><span>What information or tool would help next?</span></li>
+          <li><strong>Act</strong><span>Find references or generate a draft.</span></li>
+          <li><strong>Observe</strong><span>Compare the result with the brief.</span></li>
+        </ol>
+        <p>Repeat when there’s something to fix. Stop when the result meets the brief or the run reaches its limit.</p>
+      </figure>
+
+      <h2>React as you go, or plan ahead</h2>
+      <p>The think–act–observe loop is a plain-language way to describe <strong>ReAct</strong>, short for reasoning and acting. Each tool result helps the agent decide what to do next. If its first search turns up mostly colorful references and I asked for a black-and-white mark, it can narrow the search. <a href="https://arxiv.org/abs/2210.03629">ReAct paper</a></p>
+      <p>With <strong>plan and execute</strong>, the agent writes down the main steps first. For the logo, it might collect references, generate two drafts, then review each at a small size. The two approaches can work together. Use a plan to organize the job and a short loop to adapt inside a step.</p>
+
+      <h2>Keep track of the details that matter</h2>
+      <p>As the conversation grows, the agent may compress older messages into a shorter summary. This is called <strong>context compaction</strong>. A summary can drop a small but important detail, such as “no text” or “use a transparent background.” Keep requirements like those in a short checklist the agent can refer back to.</p>
+      <p>A team of agents is another organizational choice. One can gather references while another reviews drafts against the brief. Give each a clear job and pass along the same checklist. Every handoff adds work, so I’d start with one agent and split the work when the roles are distinct.</p>
+
+      <h2>What is the harness?</h2>
+      <p>The <strong>harness</strong> is the software around the model that runs the workflow and enforces its rules. It manages context, makes tools available, checks requests before running them, and records what happened. Think of the agent as the system doing the job and the harness as the code that keeps the job on track.</p>
+
+      <figure class="guide-diagram">
+        <figcaption>How the harness handles a tool request</figcaption>
+        <ol class="guide-steps">
+          <li><strong>Propose</strong><span>The model asks for a tool call.</span></li>
+          <li><strong>Check</strong><span>The harness validates inputs and permissions.</span></li>
+          <li><strong>Run and record</strong><span>It runs an allowed call and returns the result.</span></li>
+        </ol>
+        <p>A rejected request returns an error the agent can respond to. It can correct a format mistake or stop when an action is outside its permissions.</p>
+      </figure>
+
+      <h2>What should the harness check?</h2>
+      <ul>
+        <li><strong>Tool inputs.</strong> Check types and allowed values. If a tool expects an integer from one to four for the number of drafts, validate it before calling the tool.</li>
+        <li><strong>Output format.</strong> If the app expects fields such as <code>title</code> and <code>description</code>, check that both are present and have the right types. Fix a harmless formatting issue when the meaning is clear. For missing information, ask the model to try again with a retry limit.</li>
+        <li><strong>Untrusted content.</strong> Prompt injection happens when text in a request, web page, or tool result tries to steer the agent away from its task. Attempts to reveal hidden instructions are one example. Input and output filters can help, and the harness should also enforce permissions outside the model. <a href="https://genai.owasp.org/llm2026/llm012026-prompt-injection/">OWASP guidance on prompt injection</a></li>
+        <li><strong>What happened during the run.</strong> Record which tools ran, which failed, and when the agent stopped. Keep sensitive content out of routine logs. A trace gives you something concrete to inspect when the result looks wrong.</li>
+      </ul>
+
+      <p>I’d start with one model, one or two tools, and a clear check for success. Add a longer plan, more memory, or a second agent when the simpler setup falls short. That’s what “less is more” means to me when building AI people can monitor and trust.</p>
+    </article>
+  </main>
+</body>
+</html>
