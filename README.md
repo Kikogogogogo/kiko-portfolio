@@ -9,7 +9,7 @@ A personal website and technical blog built with HTML and CSS. Edit it directly 
 - Open `docs/index.html` to preview the homepage, or run `python3 -m http.server 8000 --directory docs` from the repository root and visit `http://localhost:8000`.
 - Edit `docs/experience/index.html` and `docs/projects/index.html` to update experience and projects. Copy an existing `article` to add an entry.
 - Edit `docs/personal-life/index.html` to update the Some Facts About Me page.
-- Change the palette, layout, or CSS tulip animation in `docs/style.css`. The illustration stays still for visitors who enable reduced motion.
+- Change the palette and layout in `docs/style.css`. The homepage Möbius strip is drawn by `docs/assets/mobius.js` and stays still for visitors who enable reduced motion.
 
 ## Publish a blog post
 
