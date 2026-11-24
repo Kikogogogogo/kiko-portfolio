@@ -81,13 +81,11 @@
   }
 
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const control = document.querySelector('.mobius-toggle');
   const revolutionMs = 12000;
   const frameInterval = 1000 / 30;
   let angle = -.55;
   let frame;
   let previousDraw;
-  let playing = false;
 
   function turn(now) {
     if (previousDraw === undefined) previousDraw = now;
@@ -100,20 +98,14 @@
     frame = requestAnimationFrame(turn);
   }
 
-  function setPlaying(next) {
+  function followPreference() {
     cancelAnimationFrame(frame);
-    playing = next;
     previousDraw = undefined;
-    control.textContent = playing ? 'Pause rotation' : 'Play rotation';
-    if (playing) frame = requestAnimationFrame(turn);
+    if (!motion.matches) frame = requestAnimationFrame(turn);
   }
-
-  const followPreference = () => setPlaying(!motion.matches);
 
   draw(angle);
   canvas.parentElement.classList.add('is-ready');
-  control.hidden = false;
-  control.addEventListener('click', () => setPlaying(!playing));
   if (typeof motion.addEventListener === 'function') {
     motion.addEventListener('change', followPreference);
   } else {
