@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Kiko Zhao's portfolio of full-stack engineering, applied AI, and technical writing.">
   <title>Kiko Zhao — Software & AI</title>
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
   <header class="top wrap">
@@ -26,12 +26,14 @@
         <p class="context">I’m an MEng student at the University of Waterloo exploring scalable systems and robot learning.</p>
         <div class="actions"><a class="button" href="projects/">Explore my projects</a><a href="https://github.com/Kikogogogogo">GitHub</a></div>
       </div>
-      <div class="hero-art" aria-hidden="true">
-        <canvas class="mobius" width="640" height="520"></canvas>
+      <div class="hero-art">
+        <img class="mobius mobius-fallback" src="assets/mobius-still.svg" width="640" height="520" alt="">
+        <canvas class="mobius mobius-live" aria-hidden="true" width="640" height="520"></canvas>
+        <button class="mobius-toggle" type="button" hidden>Play rotation</button>
       </div>
     </section>
   </main>
   <footer class="wrap foot"><span>Kiko Zhao</span><a href="https://github.com/Kikogogogogo">GitHub</a></footer>
-  <script src="assets/mobius.js?v=2" defer></script>
+  <script src="assets/mobius.js?v=3" defer></script>
 </body>
 </html>

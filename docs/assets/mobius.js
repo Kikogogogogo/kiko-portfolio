@@ -1,6 +1,6 @@
 (() => {
-  const canvas = document.querySelector('.mobius');
-  const context = canvas?.getContext('2d');
+  const canvas = document.querySelector('.mobius-live');
+  const context = canvas && canvas.getContext('2d');
   if (!context) return;
 
   const lengthSteps = 104;
@@ -68,7 +68,7 @@
     for (const { indices, depth, light } of visible) {
       const highlight = Math.pow(light, 3);
       const brightness = Math.round(26 + 37 * light + 19 * highlight + 3 * depth);
-      context.fillStyle = `hsl(334 44% ${brightness}%)`;
+      context.fillStyle = `hsl(334, 44%, ${brightness}%)`;
       context.strokeStyle = context.fillStyle;
       context.beginPath();
       const [first, ...rest] = indices;
@@ -81,25 +81,43 @@
   }
 
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const initialAngle = -.55;
+  const control = document.querySelector('.mobius-toggle');
   const revolutionMs = 12000;
+  const frameInterval = 1000 / 30;
+  let angle = -.55;
   let frame;
-  let started;
+  let previousDraw;
+  let playing = false;
 
   function turn(now) {
-    started ??= now;
-    const progress = ((now - started) % revolutionMs) / revolutionMs;
-    draw(initialAngle + 2 * Math.PI * progress);
+    if (previousDraw === undefined) previousDraw = now;
+    const elapsed = now - previousDraw;
+    if (elapsed >= frameInterval) {
+      previousDraw = now;
+      angle = (angle + 2 * Math.PI * (Math.min(elapsed, 100) / revolutionMs)) % (2 * Math.PI);
+      draw(angle);
+    }
     frame = requestAnimationFrame(turn);
   }
 
-  function updateMotion() {
+  function setPlaying(next) {
     cancelAnimationFrame(frame);
-    started = undefined;
-    draw(initialAngle);
-    if (!motion.matches) frame = requestAnimationFrame(turn);
+    playing = next;
+    previousDraw = undefined;
+    control.textContent = playing ? 'Pause rotation' : 'Play rotation';
+    if (playing) frame = requestAnimationFrame(turn);
   }
 
-  motion.addEventListener('change', updateMotion);
-  updateMotion();
+  const followPreference = () => setPlaying(!motion.matches);
+
+  draw(angle);
+  canvas.parentElement.classList.add('is-ready');
+  control.hidden = false;
+  control.addEventListener('click', () => setPlaying(!playing));
+  if (typeof motion.addEventListener === 'function') {
+    motion.addEventListener('change', followPreference);
+  } else {
+    motion.addListener(followPreference);
+  }
+  followPreference();
 })();
