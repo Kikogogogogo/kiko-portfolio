@@ -82,16 +82,15 @@
 
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const initialAngle = -.55;
-  const duration = 4800;
+  const revolutionMs = 12000;
   let frame;
   let started;
 
   function turn(now) {
     started ??= now;
-    const progress = Math.min((now - started) / duration, 1);
-    const eased = (1 - Math.cos(progress * Math.PI)) / 2;
-    draw(initialAngle + 2 * Math.PI * eased);
-    if (progress < 1) frame = requestAnimationFrame(turn);
+    const progress = ((now - started) % revolutionMs) / revolutionMs;
+    draw(initialAngle + 2 * Math.PI * progress);
+    frame = requestAnimationFrame(turn);
   }
 
   function updateMotion() {
