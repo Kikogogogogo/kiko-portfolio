@@ -3,22 +3,45 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Building an Agent You Can Monitor — Kiko Zhao</title>
+  <title>Prompt Injection, in Plain English — Kiko Zhao</title>
   <link rel="stylesheet" href="../../style.css?v=9">
+  <link rel="stylesheet" href="ai-agent-and-harness.css">
 </head>
 <body>
   <header class="top wrap"><a class="brand" href="../../">kiko<span>.</span></a><a href="./">Back to topic</a></header>
   <main class="wrap reading">
-    <article class="post">
-      <p class="label">Agents · Sample post</p>
-      <h1>Building an Agent You Can Monitor</h1>
-      <p>Consider an agent that answers project questions from a collection of approved documents. Give it one read-only search tool and require a source citation for each factual answer.</p>
-      <h2>Trace each run</h2>
-      <p>Record a run ID, tool name, response status, latency, and source IDs. Link each tool call to the parent run. Redact sensitive input and avoid retaining full documents in logs. A trace should show whether the agent found enough evidence to answer.</p>
-      <h2>Bound the workflow</h2>
-      <p>Set a tool-call budget and a timeout. If search returns no relevant results, surface that limitation to the user. Keep document permissions in the search service and validate each tool call on the server.</p>
-      <h2>Evaluate the behavior you want</h2>
-      <p>Build a small test set with answerable questions, ambiguous requests, empty results, and tool timeouts. Check citation accuracy, which failures are visible to the user, and whether the run stays within its budget. Compare those results after each change to the workflow.</p>
+    <article class="post agent-guide">
+      <p class="label">Agents</p>
+      <h1>Prompt Injection, in Plain English</h1>
+      <p class="intro">When an AI reads a document, it can mistake a sentence in the document for something it was asked to do.</p>
+
+      <h2>A simple example</h2>
+      <p>Imagine asking an agent to summarize a web page. The page contains text that tells the agent to send an email. The page is there to be read, and the user asked for a summary. If the model treats that text as a new instruction, it may try to do something the user never requested. That’s prompt injection.</p>
+      <p><strong>Direct injection</strong> comes from the message someone sends to the agent. <strong>Indirect injection</strong> comes from something the agent opens, such as a website, email, PDF, or image. A search result can be relevant to your question and still contain text the agent should ignore.</p>
+
+      <h2>Why tool access matters</h2>
+      <p>A chatbot might give a misleading answer. An agent with tools may also be able to read private files, change records, or send messages. What can actually go wrong depends on what the app lets the agent do. Saved memory can extend the problem into future sessions if the app keeps an instruction from an untrusted source.</p>
+      <p>The riskiest combination is an agent that can read untrusted content, access private information, and send information out. For a web summary, the agent only needs to read the page and return the summary.</p>
+
+      <figure class="guide-diagram">
+        <figcaption>Where the harness checks a proposed action</figcaption>
+        <ol class="guide-steps">
+          <li><strong>Read and propose</strong><span>The model reads the page and proposes its next step.</span></li>
+          <li><strong>Check permissions</strong><span>The harness checks the tool, its inputs, and what the user authorized.</span></li>
+          <li><strong>Run or stop</strong><span>Run permitted actions. Ask for approval when required and block actions outside the task.</span></li>
+        </ol>
+      </figure>
+
+      <h2>What I’d build into the harness</h2>
+      <ul>
+        <li><strong>Give it fewer tools.</strong> A web summarizer needs read access to the requested page. It does not need private mail or a send button.</li>
+        <li><strong>Check actions in code.</strong> Validate tool inputs and permissions in the application before anything runs. Review sensitive outputs before sharing them.</li>
+        <li><strong>Keep track of sources.</strong> Label where information came from and check what gets saved to long-term memory.</li>
+        <li><strong>Put people in control of consequential actions.</strong> Show what will be sent or changed and ask for approval when the action requires it.</li>
+      </ul>
+
+      <p>Filters can catch some suspicious content. Permissions enforced by the app still apply when a filter misses something or the model makes the wrong call.</p>
+      <p><a href="https://genai.owasp.org/llm2026/llm012026-prompt-injection/">Source: OWASP LLM01:2026 — Prompt Injection</a></p>
     </article>
   </main>
 </body>
