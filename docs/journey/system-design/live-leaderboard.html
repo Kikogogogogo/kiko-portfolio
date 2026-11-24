@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Designing a Live Leaderboard — Kiko Zhao</title>
+  <link rel="stylesheet" href="../../style.css?v=4">
+</head>
+<body>
+  <header class="top wrap"><a class="brand" href="../../">kiko<span>.</span></a><a href="./">Back to topic</a></header>
+  <main class="wrap reading">
+    <article class="post">
+      <p class="label">System Design · Sample post</p>
+      <h1>Designing a Live Leaderboard</h1>
+      <p>A tournament leaderboard needs to accept score corrections and show the latest standings to spectators. I would start with a single database and measure the read load before adding a cache.</p>
+      <h2>Keep scoring and ranking consistent</h2>
+      <p>Store each match result in PostgreSQL with a match ID and version. An update supplies the version it expects. In a transaction, reject stale versions and apply the score change once. Define tie-breaking rules and test them against ties and corrections.</p>
+      <h2>Update connected clients</h2>
+      <p>After a transaction commits, send an event telling viewers to refresh their standings. A reconnecting client fetches the latest snapshot. If missing a notification is unacceptable, write an outbox record in the scoring transaction and let a worker publish it with retries.</p>
+      <h2>Measure before adding a cache</h2>
+      <p>Track score submission latency, time from score commit to display, and database read load. If reads become expensive, cache a versioned standings snapshot and define how long viewers can tolerate stale results.</p>
+    </article>
+  </main>
+</body>
+</html>

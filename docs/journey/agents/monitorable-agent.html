@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Building an Agent You Can Monitor — Kiko Zhao</title>
+  <link rel="stylesheet" href="../../style.css?v=4">
+</head>
+<body>
+  <header class="top wrap"><a class="brand" href="../../">kiko<span>.</span></a><a href="./">Back to topic</a></header>
+  <main class="wrap reading">
+    <article class="post">
+      <p class="label">Agents · Sample post</p>
+      <h1>Building an Agent You Can Monitor</h1>
+      <p>Consider an agent that answers project questions from a collection of approved documents. Give it one read-only search tool and require a source citation for each factual answer.</p>
+      <h2>Trace each run</h2>
+      <p>Record a run ID, tool name, response status, latency, and source IDs. Link each tool call to the parent run. Redact sensitive input and avoid retaining full documents in logs. A trace should show whether the agent found enough evidence to answer.</p>
+      <h2>Bound the workflow</h2>
+      <p>Set a tool-call budget and a timeout. If search returns no relevant results, surface that limitation to the user. Keep document permissions in the search service and validate each tool call on the server.</p>
+      <h2>Evaluate the behavior you want</h2>
+      <p>Build a small test set with answerable questions, ambiguous requests, empty results, and tool timeouts. Check citation accuracy, which failures are visible to the user, and whether the run stays within its budget. Compare those results after each change to the workflow.</p>
+    </article>
+  </main>
+</body>
+</html>

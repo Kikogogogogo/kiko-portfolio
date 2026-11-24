@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Evaluating a Vision-Language-Action Policy — Kiko Zhao</title>
+  <link rel="stylesheet" href="../../style.css?v=4">
+</head>
+<body>
+  <header class="top wrap"><a class="brand" href="../../">kiko<span>.</span></a><a href="./">Back to topic</a></header>
+  <main class="wrap reading">
+    <article class="post">
+      <p class="label">Robot Learning · Sample post</p>
+      <h1>Evaluating a Vision-Language-Action Policy</h1>
+      <p>A vision-language-action policy maps observations and a language instruction to robot actions. A useful evaluation asks where the policy succeeds, how it fails, and whether those results repeat across conditions.</p>
+      <h2>Define a measurable task</h2>
+      <p>In a simulator, place a red block and a blue block on a table. Ask the robot to move the red block into a tray. Count success when the correct block stays in the tray after release, within a fixed time limit.</p>
+      <h2>Control one change at a time</h2>
+      <p>First repeat the baseline across several randomized initial positions. Then create separate test groups for camera viewpoint, lighting, object position, and instruction wording. Use the same evaluation configurations when comparing two policies.</p>
+      <h2>Report what went wrong</h2>
+      <p>Record the success count and trial count for each condition. Label failures such as choosing the wrong object, missing a grasp, dropping during transport, or timing out. Save the observation and action trace so a failed run can be reviewed and reproduced.</p>
+      <p>Further reading: <a href="https://arxiv.org/abs/2406.09246">OpenVLA: An Open-Source Vision-Language-Action Model</a>.</p>
+    </article>
+  </main>
+</body>
+</html>

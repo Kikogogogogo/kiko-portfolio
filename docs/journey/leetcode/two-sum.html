@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Two Sum with a Hash Map — Kiko Zhao</title>
+  <link rel="stylesheet" href="../../style.css?v=4">
+</head>
+<body>
+  <header class="top wrap"><a class="brand" href="../../">kiko<span>.</span></a><a href="./">Back to topic</a></header>
+  <main class="wrap reading">
+    <article class="post">
+      <p class="label">LeetCode · Sample post</p>
+      <h1>Two Sum with a Hash Map</h1>
+      <p>Given an array of integers and a target, return the indices of two distinct elements whose sum equals the target.</p>
+      <h2>Look up the complement</h2>
+      <p>At index <code>i</code>, subtract the current value from the target. If the difference is already in the hash map, the stored index and <code>i</code> form a valid pair. Check before storing the current value so the same index cannot be used twice.</p>
+      <pre><code>def two_sum(nums, target):
+    seen = {}
+    for i, value in enumerate(nums):
+        complement = target - value
+        if complement in seen:
+            return [seen[complement], i]
+        seen[value] = i
+    raise ValueError("No pair sums to the target")</code></pre>
+      <h2>Work through duplicates</h2>
+      <p>For <code>[3, 3]</code> and target <code>6</code>, the first pass stores <code>3 → 0</code>. The second pass finds the first <code>3</code> and returns <code>[0, 1]</code>.</p>
+      <p>Expected time is <code>O(n)</code> with constant-time hash lookups on average. The map uses <code>O(n)</code> extra space in the worst case.</p>
+    </article>
+  </main>
+</body>
+</html>

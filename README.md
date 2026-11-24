@@ -9,15 +9,15 @@ A personal website and technical blog built with HTML and CSS. Edit it directly 
 - Open `docs/index.html` to preview the homepage, or run `python3 -m http.server 8000 --directory docs` from the repository root and visit `http://localhost:8000`.
 - Edit `docs/experience/index.html` and `docs/projects/index.html` to update experience and projects. Copy an existing `article` to add an entry.
 - Edit `docs/personal-life/index.html` to add personal stories or photos.
-- Change the palette, layout, or CSS 3D animation in `docs/style.css`. The illustration stays still for visitors who enable reduced motion.
+- Change the palette, layout, or CSS cat animation in `docs/style.css`. The illustration stays still for visitors who enable reduced motion.
 
 ## Publish a blog post
 
 The blog has four topic folders under `docs/journey/`: `leetcode`, `system-design`, `robot-learning`, and `agents`.
 
-1. Choose a topic and copy `templates/post.html` into its folder. For example, use `docs/journey/leetcode/two-sum.html`.
+1. Choose a topic and copy `templates/post.html` into its folder. For example, use `docs/journey/leetcode/valid-parentheses.html`.
 2. Update the page title, heading, the date in both places in the `time` element, and the article body.
-3. Open that topic's `index.html`. Under **Posts**, replace the empty-state paragraph with a list such as `<ul><li><a href="two-sum.html">Two Sum</a></li></ul>`. For later posts, add another list item.
+3. Open that topic's `index.html`. Under **Posts**, add a list item such as `<li><a href="valid-parentheses.html">Valid Parentheses</a></li>`. Each topic includes an English sample post you can use as a reference.
 4. Open the topic page to test the article link and its **Back to topic** link. Commit the article and the index change together, then push to `main`.
 
 To update a published post, edit its existing HTML file. Update the corresponding index link text if you change the title. Keep the filename stable so existing links keep working.
