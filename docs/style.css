@@ -171,3 +171,6 @@ nav a:hover, nav a[aria-current="page"] {
   nav a { padding-inline: .43rem; }
   .hero-art { aspect-ratio: 1.6; }
 }
+
+.topics { margin-top: 1.7rem; }
+.topics p { margin-bottom: 0; }

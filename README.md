@@ -13,9 +13,15 @@ A personal website and technical blog built with HTML and CSS. Edit it directly 
 
 ## Publish a blog post
 
-1. Copy `templates/post.html` to `docs/journey/your-post.html`.
-2. Update the page title, heading, publication date, and article body.
-3. Add a link under **Posts** in `docs/journey/index.html`. For the first post, replace the empty-state paragraph with that link.
+The blog has four topic folders under `docs/journey/`: `leetcode`, `system-design`, `robot-learning`, and `agents`.
+
+1. Choose a topic and copy `templates/post.html` into its folder. For example, use `docs/journey/leetcode/two-sum.html`.
+2. Update the page title, heading, the date in both places in the `time` element, and the article body.
+3. Open that topic's `index.html`. Under **Posts**, replace the empty-state paragraph with a list such as `<ul><li><a href="two-sum.html">Two Sum</a></li></ul>`. For later posts, add another list item.
+4. Open the topic page to test the article link and its **Back to topic** link. Commit the article and the index change together, then push to `main`.
+
+To update a published post, edit its existing HTML file. Update the corresponding index link text if you change the title. Keep the filename stable so existing links keep working.
+
 
 ## Deploy on GitHub Pages
 
