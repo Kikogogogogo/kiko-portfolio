@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A step-by-step explanation of the postorder DFS solution to LeetCode 124.">
+  <title>Binary Tree Maximum Path Sum — Kiko Zhao</title>
+  <link rel="stylesheet" href="../../style.css?v=9">
+</head>
+<body>
+  <header class="top wrap">
+    <a class="brand" href="../../">kiko<span>.</span></a>
+    <a href="./">Back to LeetCode</a>
+  </header>
+  <main class="wrap reading">
+    <article class="post">
+      <p class="label">LeetCode 124 · Tree DFS</p>
+      <h1>Binary Tree Maximum Path Sum</h1>
+      <p class="intro">At each node, I ask two questions. What is the best path that turns here? What is the best path I can extend to the parent?</p>
+      <p>A path follows tree edges without visiting a node twice. It can start and end anywhere, and it must contain at least one node. The goal is to maximize the sum of its node values. <a href="https://leetcode.com/problems/binary-tree-maximum-path-sum/">Problem statement on LeetCode</a></p>
+
+      <h2>Define what the recursion returns</h2>
+      <p><code>rec(node)</code> returns the best sum of a path that starts at <code>node</code> and goes downward. It includes <code>node.val</code> and may take one branch below it. The parent can attach this result as one straight continuation of its own path.</p>
+      <p>I visit the left and right children first. That makes this a <strong>postorder DFS</strong>. An empty child contributes zero, and I clamp a negative child gain to zero because leaving that branch out gives a better sum.</p>
+
+      <h2>Update with two sides, return with one</h2>
+      <ul>
+        <li><strong>Update the answer.</strong> <code>node.val + left_gain + right_gain</code> is the best complete path whose highest node is the current node. A path can enter from the left and leave through the right, so both sides can contribute.</li>
+        <li><strong>Return to the parent.</strong> <code>node.val + max(left_gain, right_gain)</code> is the best extension the parent can use. If I kept both child branches and added the parent, the current node would have three path edges. A single path can have at most two.</li>
+      </ul>
+
+      <h2>Walk through an example</h2>
+      <p>In this tree, the answer is <code>15 → 20 → 7</code>, with a sum of <code>42</code>.</p>
+      <pre aria-label="Example tree with root negative ten, children nine and twenty, and grandchildren fifteen and seven under twenty">     -10
+     /  \
+    9    20
+        /  \
+       15   7</pre>
+      <ol>
+        <li>The leaves return their own values. Each is also a valid one-node path.</li>
+        <li>At <code>20</code>, the complete path scores <code>15 + 20 + 7 = 42</code>. The recursion returns <code>20 + 15 = 35</code>, the best single branch the parent can extend.</li>
+        <li>At <code>-10</code>, the complete path through the root scores <code>9 - 10 + 35 = 34</code>. The global best stays at <code>42</code>.</li>
+      </ol>
+
+      <h2>Python solution</h2>
+      <pre><code>class Solution(object):
+    def rec(self, root):
+        if not root:
+            return 0
+
+        left_gain = max(self.rec(root.left), 0)
+        right_gain = max(self.rec(root.right), 0)
+
+        self.maxn = max(
+            self.maxn,
+            root.val + left_gain + right_gain
+        )
+
+        return root.val + max(left_gain, right_gain)
+
+    def maxPathSum(self, root):
+        self.maxn = float("-inf")
+        self.rec(root)
+        return self.maxn</code></pre>
+
+      <h2>Why it works</h2>
+      <p>Every valid path has exactly one highest node, the one closest to the root. Below that node, the path uses at most one downward branch on each side. The recursive calls give the best branch starting at each child, so the candidate at the current node is the best path with that highest node. DFS checks that candidate at every node. The largest candidate is the answer.</p>
+
+      <h2>All-negative trees and complexity</h2>
+      <p>If all values are negative, both child gains are zero everywhere. Each node is considered by itself, so the answer is the largest node value. Initializing the best sum to negative infinity lets that negative value win.</p>
+      <p><strong>Time:</strong> <code>O(n)</code> for <code>n</code> nodes, with constant work per node. <strong>Extra space:</strong> <code>O(h)</code> for the recursion stack, where <code>h</code> is the tree height. A balanced tree uses <code>O(log n)</code> stack space, and a chain uses <code>O(n)</code>. In Python, a sufficiently deep chain can exceed the recursion limit. An explicit postorder stack avoids that limit.</p>
+    </article>
+  </main>
+</body>
+</html>
