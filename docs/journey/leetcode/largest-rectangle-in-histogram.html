@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A step-by-step note on finding the largest histogram rectangle with an increasing stack.">
+  <title>Largest Rectangle in a Histogram — Kiko Zhao</title>
+  <link rel="stylesheet" href="../../style.css?v=9">
+</head>
+<body>
+  <header class="top wrap">
+    <a class="brand" href="../../">kiko<span>.</span></a>
+    <a href="./">Back to DSA</a>
+  </header>
+  <main class="wrap reading">
+    <article class="post">
+      <p class="label">LeetCode 84 · Monotonic stack</p>
+      <h1>Largest Rectangle in a Histogram</h1>
+      <p class="intro">I started by asking how wide a rectangle can grow before a shorter bar gets in the way.</p>
+      <p>Each bar has width one. A rectangle across several consecutive bars is limited by the shortest bar in that range. Checking every range while keeping a running minimum takes <code>O(n²)</code> time. <a href="https://leetcode.com/problems/largest-rectangle-in-histogram/">LeetCode 84 problem statement</a></p>
+
+      <h2>Wait until you know the right edge</h2>
+      <p>As I scan left to right, I keep pairs of <code>(start, height)</code> in a stack. Each pair represents a height that can still extend to the right. Its start is the earliest index from which every bar seen so far is tall enough. The heights on the stack are strictly increasing.</p>
+      <p>When I reach a shorter bar at index <code>i</code>, I pop every taller height. Each popped rectangle ends just before <code>i</code>, so its area is <code>height * (i - start)</code>. The current, shorter height can extend across those taller bars, so it inherits their earliest start.</p>
+      <p>If the top of the stack already has the same height, its start is at least as early. I keep that entry. After the scan, I use a virtual zero-height bar to finish any positive heights still waiting for a right edge.</p>
+
+      <h2>Trace the moment that finds the answer</h2>
+      <pre aria-label="Example histogram heights indexed from zero to five">Index   0  1  2  3  4  5
+Height  2  1  5  6  2  3</pre>
+      <ol>
+        <li>At index <code>3</code>, the stack holds <code>(0, 1)</code>, <code>(2, 5)</code>, and <code>(3, 6)</code>. So far, the heights <code>5</code> and <code>6</code> can keep growing to the right.</li>
+        <li>The height <code>2</code> at index <code>4</code> closes both. Height <code>6</code> gives <code>6 × (4 − 3) = 6</code>. Height <code>5</code> gives <code>5 × (4 − 2) = 10</code>.</li>
+        <li>The new entry is <code>(2, 2)</code> because both taller bars to its left can support height two. No later rectangle exceeds <code>10</code>.</li>
+      </ol>
+
+      <h2>Python solution</h2>
+      <pre><code>class Solution:
+    def largestRectangleArea(self, heights):
+        stack = []
+        best = 0
+        n = len(heights)
+
+        for i in range(n + 1):
+            height = heights[i] if i &lt; n else 0
+            start = i
+
+            while stack and stack[-1][1] &gt; height:
+                left, previous_height = stack.pop()
+                best = max(best, previous_height * (i - left))
+                start = left
+
+            if not stack or stack[-1][1] &lt; height:
+                stack.append((start, height))
+
+        return best</code></pre>
+
+      <h2>Why it works</h2>
+      <p>Any optimal rectangle can be raised to the height of its shortest bar. At that height, making the rectangle as wide as possible means extending until a shorter bar or the edge of the array stops it. The stack retains the earliest viable start and waits for that right edge. Equal heights can share the earliest start, so each candidate height is evaluated at its maximum width.</p>
+      <p><strong>Time</strong> is <code>O(n)</code> because each entry is pushed and popped at most once. <strong>Extra space</strong> is <code>O(n)</code> for the stack. The final zero does not change the input.</p>
+
+      <h2>Use the same idea in a binary matrix</h2>
+      <p>For each row, track how many consecutive ones end at that row in each column. Increment a column's height on a one and reset it to zero on a zero. The resulting heights form a histogram. Every all-ones rectangle ends on some row, so running the stack algorithm at each row checks every possible bottom edge. This takes <code>O(rows × columns)</code> time and <code>O(columns)</code> extra space. <a href="https://leetcode.com/problems/maximal-rectangle/">LeetCode 85 problem statement</a></p>
+    </article>
+  </main>
+</body>
+</html>
